@@ -16,7 +16,24 @@ public class Main {
         printFrequencyWords(stringArrayList);
 
         System.out.println("=============================================================================");
-        System.out.println("Задача 2.");
+        System.out.println("Задача 2. Телефонный справочник");
+
+        PhoneBook phoneBook = new PhoneBook();
+        // заполняем справочник данными
+        phoneBook.add("Петров", "+7 (911) 322-22-23");
+        phoneBook.add("Иванов", "+7 (911) 444-44-44");
+        phoneBook.add("Петров", "+7 (911) 322-22-23");
+        phoneBook.add("Сидоров", "+7 (911) 555-55-55");
+        phoneBook.add("Андреев", "+7 (911) 666-69-69");
+        phoneBook.add("Петров", "+7 (911) 772-27-72");
+        phoneBook.add("Иванов", "+7 (911) 802-08-02");
+        phoneBook.add("Петров", "+7 (911) 999-09-90");
+        // запрашиваем результаты
+        phoneBook.get("Петров");
+        phoneBook.get("Змеинский");
+        phoneBook.get("Иванов");
+        phoneBook.get("Сидоров");
+        phoneBook.get("Андреев");
 
     }
 
