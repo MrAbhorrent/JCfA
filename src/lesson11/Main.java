@@ -10,9 +10,15 @@ public class Main {
     public static void main(String[] args) {
         // task 1
         task1();
-        System.out.println("================================================================");
+        divider();
         // task 2
         task2();
+        divider();
+        task3();
+    }
+
+    private static void divider() {
+        System.out.println("================================================================");
     }
 
     private static void task1() {
@@ -58,4 +64,44 @@ public class Main {
     private static <T> ArrayList<T> arrayToList(T[] array) {
         return new ArrayList<>(Arrays.asList(array));
     }
+
+    private static void task3() {
+
+        System.out.println("Создаем коробку с 20 яблоками");
+        Box appleBox = new Box<>(new Apple(), 20);
+        System.out.println(appleBox);
+        System.out.println("Вес коробки - " + appleBox.getWeight());
+        System.out.println();
+        System.out.println("Добавляем 10 яблок в коробку");
+        appleBox.add(new Apple(), 10);
+        System.out.println(appleBox);
+        System.out.println("Вес коробки - " + appleBox.getWeight());
+
+        System.out.println("Создаем коробку с 10 апельсинами");
+        Box<Orange> orangeBox = new Box<>(new Orange(), 10);
+        System.out.println(orangeBox);
+        System.out.println("Вес коробки - " + orangeBox.getWeight());
+        System.out.println();
+        System.out.println("Добавляем 10 апельсинов в коробку с яблоками");
+        appleBox.add(new Orange(), 10);
+        System.out.println("Добавляем 10 апельсинов в коробку с апельсинами");
+        orangeBox.add(new Orange(), 10);
+        System.out.println(orangeBox);
+        System.out.println("Вес коробки - " + orangeBox.getWeight());
+
+        if (appleBox.compare(orangeBox)) {
+            System.out.println("Веса коробок одинаковые");
+        } else {
+            System.out.println("Веса коробок различаются");
+        }
+
+        System.out.println("Создаем новую коробку и перекладываем в нее фрукты");
+        Box<Orange> orangeBoxNew = new Box<>(new Orange());
+        orangeBox.putTo(orangeBoxNew);
+        System.out.println(orangeBox);
+        System.out.println("Вес коробки - " + orangeBox.getWeight());
+        System.out.println(orangeBoxNew);
+        System.out.println("Вес коробки - " + orangeBoxNew.getWeight());
+    }
+
 }
