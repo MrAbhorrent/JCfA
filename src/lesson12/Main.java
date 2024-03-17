@@ -1,60 +1,65 @@
 package lesson12;
 
+import java.util.Arrays;
+
 public class Main {
 
     static final int SIZE = 10_000_000;
-    static final int HALF = SIZE / 2;
+    static final int HALF_SIZE = SIZE / 2;
 
     public static void main(String[] args) {
         float[] array1 = initArray();
+        System.out.println("Исходный массив инициализирован...");
         singleThreadMethod(array1);
         float[] array2 = initArray();
+        System.out.println("Исходный массив инициализирован...");
         doubleThreadMethod(array2);
+        System.out.println("Arrays are equals = " + Arrays.equals(array1, array2));
     }
 
     private static float[] initArray() {
-        float[] arr = new float[SIZE];
-        for (int i=0; i<SIZE; i++){
-            arr[i]=1;
-        }
-        System.out.println("Исходный массив инициализирован...");
-        return arr;
+        float[] result = new float[SIZE];
+        Arrays.fill(result, 1.0f);
+        return result;
     }
 
-    private static void transformArray(float[] array) {
+    private static float calculate(float value, int index) {
+        return (float)(value * Math.sin(0.2f + (float) index / 5) * Math.cos(0.2f + (float) index / 5) * Math.cos(0.4f + (float) index / 2));
+    }
+
+    private static void transformArray(float[] array, int offset) {
         for (int i = 0; i < array.length; i++) {
-            array[i] = (float)(array[i] * Math.sin(0.2f + (float) i / 5) * Math.cos(0.2f + (float) i / 5) * Math.cos(0.4f + (float) i / 2));
+            array[i] = calculate(array[i], i + offset);
         }
     }
 
     private static void singleThreadMethod(float[] array) {
         long beginTime = System.currentTimeMillis();
-        transformArray(array);
+        transformArray(array, 0);
         long endTime = System.currentTimeMillis();
         System.out.printf("Время работы (в один поток) = %s\n", (endTime - beginTime));
     }
 
     private static void doubleThreadMethod(float[] array2) {
         long beginTime = System.currentTimeMillis();
-        float[] a1 = new float[HALF];
-        float[] a2 = new float[HALF];
-        System.arraycopy(array2, 0, a1, 0, HALF);
-        System.arraycopy(array2, HALF, a2, 0, HALF);
-        Thread thread1 = new Thread(() -> transformArray(a1));
-        Thread thread2 = new Thread(() -> transformArray(a2));
+        float[] a1 = new float[HALF_SIZE];
+        float[] a2 = new float[HALF_SIZE];
+        System.arraycopy(array2, 0, a1, 0, HALF_SIZE);
+        System.arraycopy(array2, HALF_SIZE, a2, 0, HALF_SIZE);
+        Thread thread1 = new Thread(() -> transformArray(a1, 0));
+        Thread thread2 = new Thread(() -> transformArray(a2, HALF_SIZE));
         thread1.start();
         thread2.start();
         try{
             thread1.join();
             thread2.join();
-        }
-        catch(InterruptedException e){
+        } catch(InterruptedException e){
             System.out.println("Threads has been interrupted");
-            System.out.println(e.getMessage());
+            e.printStackTrace();
             return;
         }
-        System.arraycopy(a1, 0, array2, 0, HALF);
-        System.arraycopy(a2, 0, array2, HALF, HALF);
+        System.arraycopy(a1, 0, array2, 0, HALF_SIZE);
+        System.arraycopy(a2, 0, array2, HALF_SIZE, HALF_SIZE);
         long endTime = System.currentTimeMillis();
         System.out.printf("Время работы (в два потока) = %s ms\n", (endTime - beginTime));
     }
