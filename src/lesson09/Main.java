@@ -3,6 +3,8 @@ package lesson09;
 import lesson09.MyArrayExceptions.MyArrayDataException;
 import lesson09.MyArrayExceptions.MyArraySizeException;
 
+import java.util.Arrays;
+
 public class Main {
     public static void main(String[] args) throws MyArraySizeException, MyArrayDataException {
         // Тестовые архивы
@@ -35,10 +37,10 @@ public class Main {
     }
 
     static private int sumOfArray(String[][] array) throws MyArraySizeException, MyArrayDataException {
-        int result = 0;
-        if (array.length != 4) {
+        if (!is4x4Array(array)) {
             throw new MyArraySizeException(String.format("Количество колонок %d", array.length));
         }
+        int result = 0;
         for (int i = 0; i < array.length; i++) {
             if (array[i].length != 4) {
                 throw new MyArraySizeException(String.format("Количество строк %d", array.length));
@@ -57,4 +59,9 @@ public class Main {
 
         return result;
     }
+
+    public static boolean is4x4Array(String[][] array) {
+        return array.length == 4 && Arrays.stream(array).allMatch(subArray -> subArray.length == 4);
+    }
+
 }
